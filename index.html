@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantum Computing & Cryptography Laboratory</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://unpkg.com/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a3e 50%, #2d2d5f 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            overflow-x: auto;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px 0;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #00d4ff, #ff00ff, #ffff00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.8;
+        }
+
+        .tabs {
+            display: flex;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 10px;
+        }
+
+        .tab {
+            flex: 1;
+            min-width: 200px;
+            padding: 15px 25px;
+            background: transparent;
+            border: none;
+            color: #ffffff;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .tab:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .tab.active {
+            background: linear-gradient(45deg, #00d4ff, #ff00ff);
+            box-shadow: 0 5px 15px rgba(0, 212, 255, 0.3);
+        }
+
+        .tab-content {
+            display: none;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        .card h3 {
+            margin-bottom: 20px;
+            color: #00d4ff;
+            font-size: 1.5rem;
+        }
+
+        .button {
+            background: linear-gradient(45deg, #00d4ff, #0099cc);
+            border: none;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            margin: 5px;
+        }
+
+        .button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 212, 255, 0.4);
+            background: linear-gradient(45deg, #00b8e6, #0088bb);
+        }
+
+        .button.danger {
+            background: linear-gradient(45deg, #ff4757, #ff3838);
+        }
+
+        .button.success {
+            background: linear-gradient(45deg, #2ed573, #1abc9c);
+        }
+
+        .input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            font-size: 1rem;
+            margin: 10px 0;
+        }
+
+        .input:focus {
+            outline: none;
+            border-color: #00d4ff;
+            box-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
+        }
+
+        .quantum-state {
+            font-family: 'Courier New', monospace;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border-left: 4px solid #00d4ff;
+        }
+
+        .visualization {
+            width: 100%;
+            height: 300px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            margin: 20px 0;
+            position: relative;
+        }
+
+        .circuit-builder {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .gate {
+            background: linear-gradient(45deg, #ff00ff, #8a2be2);
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .gate:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(255, 0, 255, 0.4);
+        }
+
+        .log {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 15px;
+            border-radius: 10px;
+            height: 200px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            margin: 20px 0;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00d4ff, #ff00ff);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .stat {
+            text-align: center;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #00d4ff;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-top: 5px;
+        }
+
+        .molecular-viewer {
+            width: 100%;
+            height: 400px;
+            background: radial-gradient(circle, rgba(0,212,255,0.1) 0%, rgba(255,0,255,0.1) 100%);
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .atom {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .bond {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.6);
+            height: 2px;
+            transform-origin: left center;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .tabs {
+                flex-direction: column;
+            }
+            
+            .tab {
+                min-width: auto;
+                margin: 2px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <div class="container">
+            <div class="header">
+                <h1>Quantum Computing & Cryptography Laboratory</h1>
+                <p>Comprehensive simulation of quantum systems, cryptography protocols, and full-stack quantum applications</p>
+            </div>
+
+            <div class="tabs">
+                <button class="tab" :class="{active: activeTab === 'quantum'}" @click="activeTab = 'quantum'">
+                    Quantum Simulation
+                </button>
+                <button class="tab" :class="{active: activeTab === 'crypto'}" @click="activeTab = 'crypto'">
+                    Quantum Cryptography
+                </button>
+                <button class="tab" :class="{active: activeTab === 'attacks'}" @click="activeTab = 'attacks'">
+                    Encryption Attacks
+                </button>
+                <button class="tab" :class="{active: activeTab === 'fullstack'}" @click="activeTab = 'fullstack'">
+                    Full-Stack Demo
+                </button>
+            </div>
+
+            <!-- Quantum Simulation Tab -->
+            <div class="tab-content" :class="{active: activeTab === 'quantum'}">
+                <div class="grid">
+                    <div class="card">
+                        <h3>Molecular Simulation</h3>
+                        <div class="molecular-viewer" ref="molecularViewer">
+                            <div v-for="atom in molecule.atoms" :key="atom.id" 
+                                 class="atom" 
+                                 :style="{left: atom.x + 'px', top: atom.y + 'px', backgroundColor: atom.color, animationDelay: atom.id * 0.1 + 's'}">
+                                {{atom.symbol}}
+                            </div>
+                            <div v-for="bond in molecule.bonds" :key="bond.id" 
+                                 class="bond"
+                                 :style="{left: bond.x1 + 'px', top: bond.y1 + 'px', width: bond.length + 'px', transform: 'rotate(' + bond.angle + 'deg)'}">
+                            </div>
+                        </div>
+                        <button class="button" @click="generateMolecule">Generate New Molecule</button>
+                        <button class="button success" @click="simulateQuantumState">Simulate Quantum State</button>
+                    </div>
+
+                    <div class="card">
+                        <h3>Quantum Circuit Builder</h3>
+                        <div class="circuit-builder">
+                            <div class="gate" @click="addGate('H')">H</div>
+                            <div class="gate" @click="addGate('X')">X</div>
+                            <div class="gate" @click="addGate('Y')">Y</div>
+                            <div class="gate" @click="addGate('Z')">Z</div>
+                            <div class="gate" @click="addGate('CNOT')">CNOT</div>
+                            <div class="gate" @click="addGate('RZ')">RZ(θ)</div>
+                            <div class="gate" @click="addGate('RY')">RY(θ)</div>
+                            <div class="gate" @click="addGate('Measure')">Measure</div>
+                        </div>
+                        <div class="quantum-state">
+                            Circuit: {{quantumCircuit.join(' → ')}}
+                        </div>
+                        <div class="quantum-state">
+                            State: {{quantumState}}
+                        </div>
+                        <button class="button" @click="executeCircuit">Execute Circuit</button>
+                        <button class="button danger" @click="resetCircuit">Reset</button>
+                    </div>
+
+                    <div class="card">
+                        <h3>Quantum State Visualization</h3>
+                        <canvas ref="quantumCanvas" class="visualization" width="600" height="300"></canvas>
+                        <div class="stats">
+                            <div class="stat">
+                                <div class="stat-value">{{qubits}}</div>
+                                <div class="stat-label">Qubits</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value">{{entanglement.toFixed(2)}}</div>
+                                <div class="stat-label">Entanglement</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value">{{fidelity.toFixed(3)}}</div>
+                                <div class="stat-label">Fidelity</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3>Material Property Simulator</h3>
+                        <input class="input" v-model="material.name" placeholder="Material Name">
+                        <input class="input" v-model.number="material.temperature" placeholder="Temperature (K)">
+                        <input class="input" v-model.number="material.pressure" placeholder="Pressure (atm)">
+                        <button class="button" @click="simulateMaterial">Simulate Properties</button>
+                        <div class="quantum-state" v-if="material.results">
+                            <strong>Simulation Results:</strong><br>
+                            Conductivity: {{material.results.conductivity}}<br>
+                            Band Gap: {{material.results.bandGap}} eV<br>
+                            Magnetic Moment: {{material.results.magneticMoment}} μB
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quantum Cryptography Tab -->
+            <div class="tab-content" :class="{active: activeTab === 'crypto'}">
+                <div class="grid">
+                    <div class="card">
+                        <h3>BB84 Quantum Key Distribution</h3>
+                        <div class="stats">
+                            <div class="stat">
+                                <div class="stat-value">{{qkd.keyLength}}</div>
+                                <div class="stat-label">Key Length</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value">{{qkd.errorRate}}%</div>
+                                <div class="stat-label">Error Rate</div>
+                            </div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" :style="{width: qkd.progress + '%'}"></div>
+                        </div>
+                        <button class="button" @click="startQKD">Start Key Exchange</button>
+                        <button class="button success" @click="simulateEavesdropping">Simulate Eavesdropping</button>
+                        <div class="quantum-state" v-if="qkd.sharedKey">
+                            <strong>Shared Key:</strong> {{qkd.sharedKey}}
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3>Quantum Random Number Generator</h3>
+                        <input class="input" v-model.number="qrng.bits" placeholder="Number of bits">
+                        <button class="button" @click="generateQuantumRandom">Generate</button>
+                        <div class="quantum-state" v-if="qrng.result">
+                            <strong>Random Bits:</strong> {{qrng.result.binary}}<br>
+                            <strong>Decimal:</strong> {{qrng.result.decimal}}<br>
+                            <strong>Hex:</strong> {{qrng.result.hex}}
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3>Post-Quantum Cryptography</h3>
+                        <select class="input" v-model="pqc.algorithm">
+                            <option>CRYSTALS-Kyber</option>
+                            <option>CRYSTALS-Dilithium</option>
+                            <option>SPHINCS+</option>
+                            <option>FALCON</option>
+                        </select>
+                        <input class="input" v-model="pqc.message" placeholder="Message to encrypt">
+                        <button class="button" @click="pqcEncrypt">Encrypt</button>
+                        <button class="button" @click="pqcDecrypt">Decrypt</button>
+                        <div class="quantum-state" v-if="pqc.encrypted">
+                            <strong>Encrypted:</strong> {{pqc.encrypted}}<br>
+                            <strong>Decrypted:</strong> {{pqc.decrypted}}
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3>Quantum Signature Verification</h3>
+                        <input class="input" v-model="qsign.document" placeholder="Document to sign">
+                        <button class="button" @click="quantumSign">Create Quantum Signature</button>
+                        <button class="button success" @click="verifySignature">Verify Signature</button>
+                        <div class="quantum-state" v-if="qsign.signature">
+                            <strong>Signature Valid:</strong> {{qsign.valid ? 'Yes' : 'No'}}<br>
+                            <strong>Quantum Hash:</strong> {{qsign.signature}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Encryption Attacks Tab -->
+            <div class="tab-content" :class="{active: activeTab === 'attacks'}">
+                <div class="grid">
+                    <div class="card">
+                        <h3>Shor's Algorithm Simulation</h3>
+                        <input class="input" v-model.number="shor.number" placeholder="Number to factor">
+                        <button class="button" @click="runShor">Factor Number</button>
+                        <div class="progress-bar" v-if="shor.running">
+                            <div class="progress-fill" :style="{width: shor.progress + '%'}"></div>
+                        </div>
+                        <div class="quantum-state" v-if="shor.result">
+                            <strong>Prime Factors:</strong> {{shor.result.join(' × ')}}
+                        </div>
+                        <div class="log" ref="shorLog">{{shor.log}}</div>
+                    </div>
+
+                    <div class="card">
+                        <h3>Grover's Search Attack</h3>
+                        <input class="input" v-model="grover.target" placeholder="Target item to find">
+                        <input class="input" v-model.number="grover.databaseSize" placeholder="Database size">
+                        <button class="button" @click="runGrover">Start Search</button>
+                        <div class="stats">
+                            <div class="stat">
+                                <div class="stat-value">{{grover.iterations}}</div>
+                                <div class="stat-label">Iterations</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value">{{grover.speedup}}x</div>
+                                <div class="stat-label">Speedup</div>
+                            </div>
+                        </div>
+                        <div class="quantum-state" v-if="grover.found">
+                            <strong>Found:</strong> {{grover.result}} at position {{grover.position}}
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3>Classical Cipher Analysis</h3>
+                        <select class="input" v-model="cipher.type">
+                            <option>Caesar Cipher</option>
+                            <option>Vigenère Cipher</option>
+                            <option>RSA</option>
+                            <option>AES</option>
+                        </select>
+                        <input class="input" v-model="cipher.ciphertext" placeholder="Encrypted text">
+                        <button class="button" @click="analyzeCipher">Analyze</button>
+                        <button class="button danger" @click="bruteForceAttack">Brute Force</button>
+                        <div class="log" ref="cipherLog">{{cipher.log}}</div>
+                    </div>
+
+                    <div class="card">
+                        <h3>Quantum Attack Simulation</h3>
+                        <select class="input" v-model="qattack.protocol">
+                            <option>BB84 Intercept-Resend</option>
+                            <option>Man-in-the-Middle</option>
+                            <option>Photon Number Splitting</option>
+                            <option>Trojan Horse</option>
+                        </select>
+                        <button class="button danger" @click="simulateAttack">Launch Attack</button>
+                        <div class="stats">
+                            <div class="stat">
+                                <div class="stat-value">{{qattack.successRate}}%</div>
+                                <div class="stat-label">Success Rate</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value">{{qattack.detectionRate}}%</div>
+                                <div class="stat-label">Detection Rate</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Full-Stack Demo Tab -->
+            <div class="tab-content" :class="{active: activeTab === 'fullstack'}">
+                <div class="grid">
+                    <div class="card">
+                        <h3>Quantum Database Operations</h3>
+                        <input class="input" v-model="db.query" placeholder="Quantum SQL Query">
+                        <button class="button" @click="executeQuery">Execute Query</button>
+                        <div class="quantum-state" v-if="db.result">
+                            <strong>Query Result:</strong><br>
+                            {{JSON.stringify(db.result, null, 2)}}
+                        </div>
+                        <div class="stats">
+                            <div class="stat">
+                                <div class="stat-value">{{db.quantumEntries}}</div>
+                                <div class="stat-label">Quantum Entries</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value">{{db.coherenceTime}}ms</div>
+                                <div class="stat-label">Coherence Time</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3>API Endpoints</h3>
+                        <select class="input" v-model="api.endpoint">
+                            <option>/api/quantum/circuits</option>
+                            <option>/api/crypto/keys</option>
+                            <option>/api/simulation/molecule</option>
+                            <option>/api/attacks/shor</option>
+                        </select>
+                        <select class="input" v-model="api.method">
+                            <option>GET</option>
+                            <option>POST</option>
+                            <option>PUT</option>
+                            <option>DELETE</option>
+                        </select>
+                        <textarea class="input" v-model="api.payload" placeholder="JSON Payload" rows="4"></textarea>
+                        <button class="button" @click="callAPI">Call API</button>
+                        <div class="log" ref="apiLog">{{api.log}}</div>
+                    </div>
+
+                    <div class="card">
+                        <h3>Real-time Quantum Dashboard</h3>
+                        <canvas ref="dashboardChart" class="visualization" width="600" height="300"></canvas>
+                        <button class="button" @click="toggleRealTime">{{realTime ? 'Stop' : 'Start'}} Real-time Data</button>
+                        <div class="stats">
+                            <div class="stat">
+                                <div class="stat-value">{{dashboard.activeConnections}}</div>
+                                <div class="stat-label">Active Connections</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value">{{dashboard.throughput}}</div>
+                                <div class="stat-label">Throughput (qps)</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3>Quantum Cloud Integration</h3>
+                        <select class="input" v-model="cloud.provider">
+                            <option>IBM Quantum</option>
+                            <option>Google Cirq</option>
+                            <option>AWS Braket</option>
+                            <option>Microsoft Azure Quantum</option>
+                        </select>
+                        <input class="input" v-model="cloud.jobId" placeholder="Job ID">
+                        <button class="button" @click="submitJob">Submit Job</button>
+                        <button class="button" @click="checkStatus">Check Status</button>
+                        <div class="quantum-state" v-if="cloud.status">
+                            <strong>Job Status:</strong> {{cloud.status}}<br>
+                            <strong>Queue Position:</strong> {{cloud.queuePosition}}<br>
+                            <strong>Estimated Time:</strong> {{cloud.estimatedTime}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const { createApp } = Vue;
+
+        createApp({
+            data() {
+                return {
+                    activeTab: 'quantum',
+                    
+                    // Quantum Simulation
+                    molecule: {
+                        atoms: [],
+                        bonds: []
+                    },
+                    quantumCircuit: [],
+                    quantumState: '|0⟩',
+                    qubits: 3,
+                    entanglement: 0.75,
+                    fidelity: 0.998,
+                    material: {
+                        name: '',
+                        temperature: 300,
+                        pressure: 1,
+                        results: null
+                    },
+
+                    // Quantum Cryptography
+                    qkd: {
+                        keyLength: 0,
+                        errorRate: 0,
+                        progress: 0,
+                        sharedKey: ''
+                    },
+                    qrng: {
+                        bits: 128,
+                        result: null
+                    },
+                    pqc: {
+                        algorithm: 'CRYSTALS-Kyber',
+                        message: '',
+                        encrypted: '',
+                        decrypted: ''
+                    },
+                    qsign: {
+                        document: '',
+                        signature: '',
+                        valid: false
+                    },
+
+                    // Encryption Attacks
+                    shor: {
+                        number: 15,
+                        running: false,
+                        progress: 0,
+                        result: [],
+                        log: ''
+                    },
+                    grover: {
+                        target: '',
+                        databaseSize: 1000000,
+                        iterations: 0,
+                        speedup: 0,
+                        found: false,
+                        result: '',
+                        position: 0
+                    },
+                    cipher: {
+                        type: 'Caesar Cipher',
+                        ciphertext: '',
+                        log: ''
+                    },
+                    qattack: {
+                        protocol: 'BB84 Intercept-Resend',
+                        successRate: 0,
+                        detectionRate: 0
+                    },
+
+                    // Full-Stack
+                    db: {
+                        query: '',
+                        result: null,
+                        quantumEntries: 1024,
+                        coherenceTime: 100
+                    },
+                    api: {
+                        endpoint: '/api/quantum/circuits',
+                        method: 'GET',
+                        payload: '',
+                        log: ''
+                    },
+                    dashboard: {
+                        activeConnections: 42,
+                        throughput: 1337
+                    },
+                    cloud: {
+                        provider: 'IBM Quantum',
+                        jobId: '',
+                        status: '',
+                        queuePosition: 0,
+                        estimatedTime: ''
+                    },
+                    realTime: false,
+                    chartInstance: null
+                }
+            },
+            
+            mounted() {
+                this.generateMolecule();
+                this.initializeQuantumVisualization();
+                this.setupRealTimeDashboard();
+            },
+
+            methods: {
+                // Quantum Simulation Methods
+                generateMolecule() {
+                    const molecules = [
+                        { name: 'H2O', atoms: [
+                            {id: 1, symbol: 'O', x: 200, y: 180, color: '#ff4757'},
+                            {id: 2, symbol: 'H', x: 150, y: 150, color: '#00d4ff'},
+                            {id: 3, symbol: 'H', x: 250, y: 150, color: '#00d4ff'}
+                        ]},
+                        { name: 'CO2', atoms: [
+                            {id: 1, symbol: 'C', x: 200, y: 180, color: '#2f3542'},
+                            {id: 2, symbol: 'O', x: 150, y: 180, color: '#ff4757'},
+                            {id: 3, symbol: 'O', x: 250, y: 180, color: '#ff4757'}
+                        ]},
+                        { name: 'NH3', atoms: [
+                            {id: 1, symbol: 'N', x: 200, y: 180, color: '#3742fa'},
+                            {id: 2, symbol: 'H', x: 170, y: 150, color: '#00d4ff'},
+                            {id: 3, symbol: 'H', x: 230, y: 150, color: '#00d4ff'},
+                            {id: 4, symbol: 'H', x: 200, y: 220, color: '#00d4ff'}
+                        ]}
+                    ];
+                    
+                    const selected = molecules[Math.floor(Math.random() * molecules.length)];
+                    this.molecule = selected;
+                    
+                    // Generate bonds
+                    this.molecule.bonds = [];
+                    for (let i = 0; i < selected.atoms.length - 1; i++) {
+                        const atom1 = selected.atoms[i];
+                        const atom2 = selected.atoms[i + 1];
+                        const dx = atom2.x - atom1.x;
+                        const dy = atom2.y - atom1.y;
+                        const length = Math.sqrt(dx * dx + dy * dy);
+                        const angle = Math.atan2(dy, dx) * 180 / Math.PI;
+                        
+                        this.molecule.bonds.push({
+                            id: i,
+                            x1: atom1.x + 15,
+                            y1: atom1.y + 15,
+                            length: length - 30,
+                            angle: angle
+                        });
+                    }
+                },
+
+                addGate(gate) {
+                    this.quantumCircuit.push(gate);
+                    this.updateQuantumState();
+                },
+
+                executeCircuit() {
+                    this.quantumState = this.calculateQuantumState();
+                    this.updateQuantumVisualization();
+                },
+
+                resetCircuit() {
+                    this.quantumCircuit = [];
+                    this.quantumState = '|0⟩';
+                    this.updateQuantumVisualization();
+                },
+
+                calculateQuantumState() {
+                    const states = ['|0⟩', '|1⟩', '|+⟩', '|-⟩', '|00⟩', '|01⟩', '|10⟩', '|11⟩'];
+                    return states[Math.floor(Math.random() * states.length)];
+                },
+
+                updateQuantumState() {
+                    this.entanglement = Math.random();
+                    this.fidelity = 0.9 + Math.random() * 0.1;
+                },
+
+                simulateQuantumState() {
+                    this.qubits = Math.floor(Math.random() * 8) + 1;
+                    this.entanglement = Math.random();
+                    this.fidelity = 0.9 + Math.random() * 0.1;
+                    this.updateQuantumVisualization();
+                },
+
+                simulateMaterial() {
+                    const results = {
+                        conductivity: (Math.random() * 1000).toFixed(2) + ' S/m',
+                        bandGap: (Math.random() * 5).toFixed(2),
+                        magneticMoment: (Math.random() * 10).toFixed(2)
+                    };
+                    this.material.results = results;
+                },
+
+                initializeQuantumVisualization() {
+                    const canvas = this.$refs.quantumCanvas;
+                    if (!canvas) return;
+                    
+                    const ctx = canvas.getContext('2d');
+                    this.drawQuantumState(ctx);
+                },
+
+                updateQuantumVisualization() {
+                    const canvas = this.$refs.quantumCanvas;
+                    if (!canvas) return;
+                    
+                    const ctx = canvas.getContext('2d');
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    this.drawQuantumState(ctx);
+                },
+
+                drawQuantumState(ctx) {
+                    const centerX = 300;
+                    const centerY = 150;
+                    const radius = 100;
+
+                    // Draw Bloch sphere
+                    ctx.strokeStyle = '#00d4ff';
+                    ctx.lineWidth = 2;
+                    ctx.beginPath();
+                    ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
+                    ctx.stroke();
+
+                    // Draw state vector
+                    const angle = Math.random() * 2 * Math.PI;
+                    const x = centerX + Math.cos(angle) * radius * 0.8;
+                    const y = centerY + Math.sin(angle) * radius * 0.8;
+
+                    ctx.strokeStyle = '#ff00ff';
+                    ctx.lineWidth = 3;
+                    ctx.beginPath();
+                    ctx.moveTo(centerX, centerY);
+                    ctx.lineTo(x, y);
+                    ctx.stroke();
+
+                    // Draw probability amplitudes
+                    for (let i = 0; i < this.qubits; i++) {
+                        const barX = 50 + i * 80;
+                        const barHeight = Math.random() * 100 + 20;
+                        
+                        ctx.fillStyle = `hsl(${i * 60}, 70%, 50%)`;
+                        ctx.fillRect(barX, 250 - barHeight, 60, barHeight);
+                        
+                        ctx.fillStyle = '#ffffff';
+                        ctx.font = '12px Arial';
+                        ctx.textAlign = 'center';
+                        ctx.fillText(`|${i}⟩`, barX + 30, 270);
+                    }
+                },
+
+                // Quantum Cryptography Methods
+                startQKD() {
+                    this.qkd.progress = 0;
+                    this.qkd.keyLength = 0;
+                    this.qkd.errorRate = 0;
+
+                    const interval = setInterval(() => {
+                        this.qkd.progress += 10;
+                        this.qkd.keyLength += Math.floor(Math.random() * 8) + 1;
+                        this.qkd.errorRate = Math.random() * 5;
+
+                        if (this.qkd.progress >= 100) {
+                            clearInterval(interval);
+                            this.qkd.sharedKey = this.generateRandomBits(256);
+                        }
+                    }, 200);
+                },
+
+                simulateEavesdropping() {
+                    this.qkd.errorRate = 25 + Math.random() * 25;
+                },
+
+                generateQuantumRandom() {
+                    const bits = this.qrng.bits || 128;
+                    const binary = this.generateRandomBits(bits);
+                    const decimal = parseInt(binary.slice(0, 32), 2);
+                    const hex = decimal.toString(16).toUpperCase();
+
+                    this.qrng.result = { binary, decimal, hex };
+                },
+
+                generateRandomBits(length) {
+                    let result = '';
+                    for (let i = 0; i < length; i++) {
+                        result += Math.round(Math.random());
+                    }
+                    return result;
+                },
+
+                pqcEncrypt() {
+                    this.pqc.encrypted = btoa(this.pqc.message + '_' + this.pqc.algorithm);
+                },
+
+                pqcDecrypt() {
+                    try {
+                        const decoded = atob(this.pqc.encrypted);
+                        this.pqc.decrypted = decoded.split('_')[0];
+                    } catch (e) {
+                        this.pqc.decrypted = 'Decryption failed';
+                    }
+                },
+
+                quantumSign() {
+                    this.qsign.signature = this.hashQuantum(this.qsign.document);
+                    this.qsign.valid = true;
+                },
+
+                verifySignature() {
+                    const expected = this.hashQuantum(this.qsign.document);
+                    this.qsign.valid = expected === this.qsign.signature;
+                },
+
+                hashQuantum(input) {
+                    let hash = 0;
+                    for (let i = 0; i < input.length; i++) {
+                        hash = ((hash << 5) - hash + input.charCodeAt(i)) & 0xffffffff;
+                    }
+                    return 'Q' + Math.abs(hash).toString(16).toUpperCase();
+                },
+
+                // Encryption Attack Methods
+                runShor() {
+                    this.shor.running = true;
+                    this.shor.progress = 0;
+                    this.shor.log = 'Starting Shor\'s algorithm...\n';
+
+                    const interval = setInterval(() => {
+                        this.shor.progress += Math.random() * 15;
+                        this.shor.log += `Step ${Math.floor(this.shor.progress / 10)}: Finding period...\n`;
+
+                        if (this.shor.progress >= 100) {
+                            clearInterval(interval);
+                            this.shor.running = false;
+                            this.shor.result = this.factorize(this.shor.number);
+                            this.shor.log += `Factors found: ${this.shor.result.join(' × ')}\n`;
+                        }
+                    }, 300);
+                },
+
+                factorize(n) {
+                    const factors = [];
+                    let d = 2;
+                    while (d * d <= n) {
+                        while (n % d === 0) {
+                            factors.push(d);
+                            n /= d;
+                        }
+                        d++;
+                    }
+                    if (n > 1) factors.push(n);
+                    return factors.length > 0 ? factors : [n];
+                },
+
+                runGrover() {
+                    this.grover.iterations = Math.ceil(Math.sqrt(this.grover.databaseSize));
+                    this.grover.speedup = Math.floor(this.grover.databaseSize / this.grover.iterations);
+                    this.grover.found = true;
+                    this.grover.result = this.grover.target;
+                    this.grover.position = Math.floor(Math.random() * this.grover.databaseSize);
+                },
+
+                analyzeCipher() {
+                    this.cipher.log = `Analyzing ${this.cipher.type}...\n`;
+                    this.cipher.log += 'Frequency analysis complete.\n';
+                    this.cipher.log += 'Pattern matching in progress...\n';
+                    this.cipher.log += 'Possible plaintext candidates found.\n';
+                },
+
+                bruteForceAttack() {
+                    this.cipher.log += '\nStarting brute force attack...\n';
+                    let attempts = 0;
+                    const interval = setInterval(() => {
+                        attempts++;
+                        this.cipher.log += `Attempt ${attempts}: Testing key...\n`;
+                        
+                        if (attempts >= 10) {
+                            clearInterval(interval);
+                            this.cipher.log += 'Attack completed. Key found!\n';
+                        }
+                    }, 200);
+                },
+
+                simulateAttack() {
+                    this.qattack.successRate = Math.random() * 100;
+                    this.qattack.detectionRate = 100 - this.qattack.successRate + Math.random() * 20;
+                },
+
+                // Full-Stack Methods
+                executeQuery() {
+                    const mockResults = [
+                        { id: 1, qubit_state: '|0⟩', coherence_time: 100 },
+                        { id: 2, qubit_state: '|1⟩', coherence_time: 95 },
+                        { id: 3, qubit_state: '|+⟩', coherence_time: 87 }
+                    ];
+                    this.db.result = mockResults;
+                    this.db.coherenceTime = Math.floor(Math.random() * 50) + 50;
+                },
+
+                callAPI() {
+                    this.api.log = `${new Date().toISOString()} - ${this.api.method} ${this.api.endpoint}\n`;
+                    this.api.log += `Payload: ${this.api.payload}\n`;
+                    this.api.log += 'Response: 200 OK\n';
+                    this.api.log += JSON.stringify({
+                        status: 'success',
+                        data: { quantum_result: Math.random() }
+                    }, null, 2);
+                },
+
+                setupRealTimeDashboard() {
+                    this.$nextTick(() => {
+                        const canvas = this.$refs.dashboardChart;
+                        if (!canvas) return;
+
+                        const ctx = canvas.getContext('2d');
+                        this.chartInstance = new Chart(ctx, {
+                            type: 'line',
+                            data: {
+                                labels: Array.from({length: 10}, (_, i) => i),
+                                datasets: [{
+                                    label: 'Quantum Fidelity',
+                                    data: Array.from({length: 10}, () => Math.random()),
+                                    borderColor: '#00d4ff',
+                                    backgroundColor: 'rgba(0, 212, 255, 0.1)'
+                                }, {
+                                    label: 'Entanglement',
+                                    data: Array.from({length: 10}, () => Math.random()),
+                                    borderColor: '#ff00ff',
+                                    backgroundColor: 'rgba(255, 0, 255, 0.1)'
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                plugins: {
+                                    legend: {
+                                        labels: {
+                                            color: '#ffffff'
+                                        }
+                                    }
+                                },
+                                scales: {
+                                    x: {
+                                        ticks: {
+                                            color: '#ffffff'
+                                        }
+                                    },
+                                    y: {
+                                        ticks: {
+                                            color: '#ffffff'
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                    });
+                },
+
+                toggleRealTime() {
+                    this.realTime = !this.realTime;
+                    
+                    if (this.realTime && this.chartInstance) {
+                        this.realTimeInterval = setInterval(() => {
+                            this.dashboard.activeConnections = Math.floor(Math.random() * 100) + 20;
+                            this.dashboard.throughput = Math.floor(Math.random() * 2000) + 500;
+                            
+                            // Update chart data
+                            this.chartInstance.data.datasets[0].data.shift();
+                            this.chartInstance.data.datasets[0].data.push(Math.random());
+                            this.chartInstance.data.datasets[1].data.shift();
+                            this.chartInstance.data.datasets[1].data.push(Math.random());
+                            this.chartInstance.update('none');
+                        }, 1000);
+                    } else if (this.realTimeInterval) {
+                        clearInterval(this.realTimeInterval);
+                    }
+                },
+
+                submitJob() {
+                    this.cloud.status = 'Queued';
+                    this.cloud.queuePosition = Math.floor(Math.random() * 50) + 1;
+                    this.cloud.estimatedTime = `${Math.floor(Math.random() * 60) + 5} minutes`;
+                },
+
+                checkStatus() {
+                    const statuses = ['Queued', 'Running', 'Completed', 'Failed'];
+                    this.cloud.status = statuses[Math.floor(Math.random() * statuses.length)];
+                    
+                    if (this.cloud.status === 'Running') {
+                        this.cloud.queuePosition = 0;
+                        this.cloud.estimatedTime = `${Math.floor(Math.random() * 10) + 1} minutes`;
+                    }
+                }
+            },
+
+            beforeUnmount() {
+                if (this.realTimeInterval) {
+                    clearInterval(this.realTimeInterval);
+                }
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>
