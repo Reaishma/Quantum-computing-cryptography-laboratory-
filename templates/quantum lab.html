@@ -1,0 +1,202 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantum Computing Laboratory - Multi-Framework</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://unpkg.com/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <div id="app">
+        <div class="framework-selector">
+            <h2>Select Quantum Framework:</h2>
+            <select v-model="selectedFramework" @change="updateFramework">
+                <option value="qiskit">IBM Qiskit</option>
+                <option value="cirq">Google Cirq</option>
+                <option value="qsharp">Microsoft Q#</option>
+            </select>
+            <button @click="compareFrameworks" class="compare-btn">Compare All</button>
+        </div>
+        
+        <div class="framework-info">
+            <h3>{{frameworkInfo.name}}</h3>
+            <p>{{frameworkInfo.description}}</p>
+            <div class="capabilities">
+                <span v-for="cap in frameworkInfo.capabilities" :key="cap" class="capability-tag">
+                    {{cap}}
+                </span>
+            </div>
+        </div>
+        
+        <!-- Original HTML content with framework integration -->
+        <div v-html="htmlContent"></div>
+        
+        <div class="api-console">
+            <h3>Quantum API Console</h3>
+            <div class="console-controls">
+                <select v-model="apiOperation">
+                    <option v-for="op in availableOperations" :key="op.value" :value="op.value">
+                        {{op.label}}
+                    </option>
+                </select>
+                <button @click="executeQuantumOperation" class="execute-btn">Execute</button>
+            </div>
+            <div class="api-result" v-if="apiResult">
+                <pre>{{JSON.stringify(apiResult, null, 2)}}</pre>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const { createApp } = Vue;
+        
+        createApp({
+            data() {
+                return {
+                    selectedFramework: 'qiskit',
+                    htmlContent: `{{ html_content|safe }}`,
+                    apiOperation: 'molecular_simulation',
+                    apiResult: null,
+                    frameworkInfo: {
+                        qiskit: {
+                            name: 'IBM Qiskit',
+                            description: 'Open-source quantum computing framework with extensive hardware support',
+                            capabilities: ['Hardware Access', 'Circuit Optimization', 'Noise Modeling', 'Quantum ML']
+                        },
+                        cirq: {
+                            name: 'Google Cirq',
+                            description: 'Python framework for NISQ algorithms and Google quantum processors',
+                            capabilities: ['NISQ Algorithms', 'VQE', 'QAOA', 'Error Correction']
+                        },
+                        qsharp: {
+                            name: 'Microsoft Q#',
+                            description: 'Quantum programming language with Azure Quantum integration',
+                            capabilities: ['Enterprise Scale', 'Azure Cloud', 'Quantum Chemistry', 'Cryptography']
+                        }
+                    },
+                    availableOperations: {
+                        qiskit: [
+                            {value: 'molecular_simulation', label: 'Molecular Simulation'},
+                            {value: 'bb84_qkd', label: 'BB84 Quantum Key Distribution'},
+                            {value: 'shors_algorithm', label: 'Shor\'s Algorithm'},
+                            {value: 'material_simulation', label: 'Material Properties'}
+                        ],
+                        cirq: [
+                            {value: 'vqe_simulation', label: 'Variational Quantum Eigensolver'},
+                            {value: 'qaoa_optimization', label: 'QAOA Optimization'},
+                            {value: 'quantum_ml', label: 'Quantum Machine Learning'},
+                            {value: 'error_correction', label: 'Quantum Error Correction'}
+                        ],
+                        qsharp: [
+                            {value: 'phase_estimation', label: 'Quantum Phase Estimation'},
+                            {value: 'dynamics_simulation', label: 'Hamiltonian Dynamics'},
+                            {value: 'azure_integration', label: 'Azure Quantum Integration'},
+                            {value: 'optimization_suite', label: 'Quantum Optimization'}
+                        ]
+                    }
+                }
+            },
+            
+            computed: {
+                frameworkInfo() {
+                    return this.frameworkInfo[this.selectedFramework];
+                },
+                availableOperations() {
+                    return this.availableOperations[this.selectedFramework] || [];
+                }
+            },
+            
+            methods: {
+                updateFramework() {
+                    this.apiResult = null;
+                    this.apiOperation = this.availableOperations[0]?.value || '';
+                },
+                
+                async executeQuantumOperation() {
+                    try {
+                        const response = await axios.post('/api/quantum/', {
+                            framework: this.selectedFramework,
+                            operation: this.apiOperation,
+                            params: {}
+                        });
+                        
+                        this.apiResult = response.data;
+                    } catch (error) {
+                        this.apiResult = {
+                            error: error.response?.data?.error || error.message
+                        };
+                    }
+                },
+                
+                async compareFrameworks() {
+                    try {
+                        const response = await axios.post('/api/quantum/compare/', {
+                            type: 'molecular_simulation'
+                        });
+                        
+                        this.apiResult = response.data;
+                    } catch (error) {
+                        this.apiResult = {
+                            error: error.response?.data?.error || error.message
+                        };
+                    }
+                }
+            }
+        }).mount('#app');
+    </script>
+    
+    <style>
+        .framework-selector {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+        }
+        
+        .framework-info {
+            background: linear-gradient(45deg, #00d4ff, #ff00ff);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            color: white;
+        }
+        
+        .capability-tag {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 5px 10px;
+            margin: 5px;
+            border-radius: 15px;
+            display: inline-block;
+        }
+        
+        .api-console {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            color: white;
+        }
+        
+        .api-result {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 10px;
+            overflow-x: auto;
+        }
+        
+        .execute-btn, .compare-btn {
+            background: linear-gradient(45deg, #00d4ff, #0099cc);
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px;
+        }
+    </style>
+</body>
+</html>
