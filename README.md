@@ -32,8 +32,8 @@ A comprehensive quantum computing laboratory implementing quantum algorithms, si
 
 ### Quantum Simulation
 
-    - **Quantum Circuit Builder** Supports various quantum gates like H, X, Y, Z, CNOT, RZ(θ), and RY(θ)
-    - **Quantum State Visualization** Visualize states of up to 3 qubits with entanglement and fidelity measurements
+- **Quantum Circuit Builder** Supports various quantum gates like H, X, Y, Z, CNOT, RZ(θ), and RY(θ)
+- **Quantum State Visualization** Visualize states of up to 3 qubits with entanglement and fidelity measurements
 
 ### Molecular Simulation
 - **Molecular Structure Generation** Visualize molecular structures (H2O, CO2, NH3)
