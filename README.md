@@ -24,40 +24,44 @@ A comprehensive quantum computing laboratory implementing quantum algorithms, si
 - **Quantum Fourier Transform**: Essential quantum algorithm implementation
 
 ### Quantum Simulation (Cirq)
-- **Quantum Phase Estimation**: Estimate eigenvalues of unitary operators
-- **Quantum Walk**: Quantum random walk simulations
-- **Quantum Teleportation**: Demonstrate quantum information transfer
-- **Advanced Circuit Simulations**: Complex quantum state manipulations
 
-### Quantum Simulation:
-    - **Quantum Circuit Builder**: Supports various quantum gates like H, X, Y, Z, CNOT, RZ(θ), and RY(θ)
-    - **Quantum State Visualization**: Visualize states of up to 3 qubits with entanglement and fidelity measurements
+- **Quantum Phase Estimation** Estimate eigenvalues of unitary operators
+- **Quantum Walk** Quantum random walk simulations
+- **Quantum Teleportation** Demonstrate quantum information transfer
+- **Advanced Circuit Simulations** Complex quantum state manipulations
+
+### Quantum Simulation
+
+    - **Quantum Circuit Builder** Supports various quantum gates like H, X, Y, Z, CNOT, RZ(θ), and RY(θ)
+    - **Quantum State Visualization** Visualize states of up to 3 qubits with entanglement and fidelity measurements
 
 ### Molecular Simulation
-- **Molecular Structure Generation**: Visualize molecular structures (H2O, CO2, NH3)
-- **Quantum Chemistry**: Quantum chemistry calculations for small molecules
-- **Ground State Energy**: Calculate molecular ground states using VQE
+- **Molecular Structure Generation** Visualize molecular structures (H2O, CO2, NH3)
+- **Quantum Chemistry** Quantum chemistry calculations for small molecules
+- **Ground State Energy** Calculate molecular ground states using VQE
 
 ### Quantum Cryptography
-- **BB84 Quantum Key Distribution**: Secure key exchange using quantum mechanics
-- **Quantum Random Number Generator (QRNG)**: True randomness from quantum measurements
-- **Quantum Digital Signatures**: Cryptographic signatures using quantum protocols
-- **Post-Quantum Cryptography**: Support for quantum-resistant algorithms (CRYSTALS-Kyber, Dilithium, SPHINCS+, FALCON)
+- **BB84 Quantum Key Distribution** Secure key exchange using quantum mechanics
+- **Quantum Random Number Generator (QRNG)** True randomness from quantum measurements
+- **Quantum Digital Signatures** Cryptographic signatures using quantum protocols
+- **Post-Quantum Cryptography** Support for quantum-resistant algorithms (CRYSTALS-Kyber, Dilithium, SPHINCS+, FALCON)
 
 ### Quantum Algorithm Simulations:
-    - **Shor's Algorithm**: Factor numbers using quantum parallelism (demonstrated with 15 = 3 × 5)
-    - **Grover's Search Algorithm**: Find specific elements in unsorted databases with quantum speedup
-    - ** Classical Cipher Analysis**:
-    - *Caesar Cipher Analysis*: Brute-force attacks with frequency analysis and pattern matching
+- **Shor's Algorithm** Factor numbers using quantum parallelism (demonstrated with 15 = 3 × 5)
+- **Grover's Search Algorithm** Find specific elements in unsorted databases with quantum speedup
+- ** Classical Cipher Analysis**
+- *Caesar Cipher Analysis* Brute-force attacks with frequency analysis and pattern matching
 
 ### Security & Attack Simulation
-- **Attack Protocols**: Simulate various quantum cryptographic attacks:
+- **Attack Protocols** Simulate various quantum cryptographic attacks
   - BB84 Intercept-Resend
   - Man-in-the-Middle
   - Photon Number Splitting
   - Trojan Horse
-- **Security Analysis**: Real-time success and detection rate calculations
-- **Security Recommendations**: Best practices for quantum-safe communications
+- **Security Analysis**
+ Real-time success and detection rate calculations
+- **Security Recommendations**
+Best practices for quantum-safe communications
 
 ### Advanced Features
 - **Quantum State Analysis**: Entanglement measurement and fidelity calculations
@@ -65,16 +69,24 @@ A comprehensive quantum computing laboratory implementing quantum algorithms, si
 - **Error Analysis**: Quantum error rates and decoherence studies
 - **API Testing & Monitoring**: Built-in API testing interface with comprehensive logging
 
-### Full-Stack Demo:
-    - **Quantum Database Operations**: Create, execute, and query quantum databases with real-time data
-    - **API Endpoints**: Supports JSON payload calls for quantum circuit simulations
-    - *"Real-time Quantum Dashboard**: Monitor active connections, throughput, and job status
+### Full-Stack Demo
+- **Quantum Database Operations**
+ Create, execute, and query quantum databases with real-time data
+- **API Endpoints** 
+Supports JSON payload calls for quantum circuit simulations
+- *"Real-time Quantum Dashboard**
+ Monitor active connections, throughput, and job status
 
-### Quantum Cloud Integration:
-    - **IBM Quantum Job Submission**: Submit jobs and check status with estimated time and queue position
-    - **Google Cirq**: Supports Cirq framework for quantum circuit simulations
-    - **AWS Braket**: Supports Braket framework for quantum computing and simulation
-    - **Microsoft Azure Quantum**: Supports Azure Quantum framework for quantum computing and simulation
+### Quantum Cloud Integration
+
+- **IBM Quantum Job Submission**
+ Submit jobs and check status with estimated time and queue position
+- **Google Cirq**
+Supports Cirq framework for quantum circuit simulations
+- **AWS Braket**
+ Supports Braket framework for quantum computing and simulation
+- **Microsoft Azure Quantum**
+ Supports Azure Quantum framework for quantum computing and simulation
 
 ## 🛠️ Technology Stack
 
