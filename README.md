@@ -43,6 +43,9 @@ View live demo https://reaishma.github.io/Quantum-computing-cryptography-laborat
 - **Ground State Energy** Calculate molecular ground states using VQE
 
 ### Quantum Cryptography
+
+![Cryptography](https://github.com/Reaishma/Quantum-computing-cryptography-laboratory-/blob/main/chrome_screenshot_Sep%206%2C%202025%2011_06_50%20AM%20GMT%2B05_30.png)
+
 - **BB84 Quantum Key Distribution** Secure key exchange using quantum mechanics
 - **Quantum Random Number Generator (QRNG)** True randomness from quantum measurements
 - **Quantum Digital Signatures** Cryptographic signatures using quantum protocols
