@@ -54,7 +54,7 @@ View live demo https://reaishma.github.io/Quantum-computing-cryptography-laborat
 ### Quantum Algorithm Simulations:
 - **Shor's Algorithm** Factor numbers using quantum parallelism (demonstrated with 15 = 3 × 5)
 - **Grover's Search Algorithm** Find specific elements in unsorted databases with quantum speedup
-- ** Classical Cipher Analysis**
+- **Classical Cipher Analysis**
 - *Caesar Cipher Analysis* Brute-force attacks with frequency analysis and pattern matching
 
 ### Security & Attack Simulation
