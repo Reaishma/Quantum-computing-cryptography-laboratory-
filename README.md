@@ -58,6 +58,9 @@ View live demo https://reaishma.github.io/Quantum-computing-cryptography-laborat
 - *Caesar Cipher Analysis* Brute-force attacks with frequency analysis and pattern matching
 
 ### Security & Attack Simulation
+
+![Attack](https://github.com/Reaishma/Quantum-computing-cryptography-laboratory-/blob/main/chrome_screenshot_Sep%206%2C%202025%2011_07_36%20AM%20GMT%2B05_30.png)
+
 - **Attack Protocols** Simulate various quantum cryptographic attacks
   - BB84 Intercept-Resend
   - Man-in-the-Middle
