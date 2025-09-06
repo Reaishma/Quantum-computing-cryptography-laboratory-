@@ -9,6 +9,9 @@ A comprehensive quantum computing laboratory implementing quantum algorithms, si
 
 View live demo https://reaishma.github.io/Quantum-computing-cryptography-laboratory-/
 
+## 🧑‍💻 Developer 
+
+**Reaishma N**
 
 ## 🚀 Features
 
@@ -446,7 +449,9 @@ This project is open-source and available under the MIT License.
 
 ## 🆘 Support
 
-For support, email support@quantumlab.dev or join our [Discord community](https://discord.gg/quantumlab).
+For support,
+- Contact Developer 
+
 
 ## 🏆 Acknowledgments
 
