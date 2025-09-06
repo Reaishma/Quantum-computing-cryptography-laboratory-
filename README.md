@@ -3,6 +3,8 @@
 
 A comprehensive quantum computing laboratory implementing quantum algorithms, simulations, and cryptography protocols using **Qiskit** and **Cirq** frameworks, with a full-stack web application featuring Vue.js frontend and dual backend support (ASP.NET Core & Python Flask).
 
+![Overview](https://github.com/Reaishma/Quantum-computing-cryptography-laboratory-/blob/main/chrome_screenshot_Sep%206%2C%202025%2011_05_46%20AM%20GMT%2B05_30.png)
+
 # 🚀 Live Demo 
 
 View live demo https://reaishma.github.io/Quantum-computing-cryptography-laboratory-/
