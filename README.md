@@ -84,6 +84,8 @@ Supports JSON payload calls for quantum circuit simulations
 
 ### Quantum Cloud Integration
 
+![Cloud integration](https://github.com/Reaishma/Quantum-computing-cryptography-laboratory-/blob/main/chrome_screenshot_Sep%206%2C%202025%2011_04_24%20AM%20GMT%2B05_30.png)
+
 - **IBM Quantum Job Submission**
  Submit jobs and check status with estimated time and queue position
 - **Google Cirq**
